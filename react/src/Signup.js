@@ -1,0 +1,62 @@
+import React, { Component } from 'react';
+
+class Signup extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      username: '',
+      password: '',
+      fullname: '',
+      error: ''
+    };
+  }
+
+  handleInputChange = (e) => {
+    this.setState({
+      [e.target.name]: e.target.value
+    });
+  }
+
+  signup = async (e) => {
+    e.preventDefault();
+    const { username, password, fullname } = this.state;
+    try {
+      const response = await fetch('http://localhost:3030/signup', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ fullname, username, password })
+      });
+      if (response.ok) {
+        console.log('User signed up successfully');
+        this.props.onSignupSuccess(); // Notify the parent component of successful signup
+      } else {
+        const data = await response.json();
+        this.setState({ error: data.error });
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      this.setState({ error: 'An error occurred while signing up. Please try again later.' });
+    }
+  }
+
+  render() {
+    return (
+      <div id="Signup">
+        <form onSubmit={this.signup}>
+          <label>Fullname:</label><br/>
+          <input type="text" name="fullname" value={this.state.fullname} onChange={this.handleInputChange} /><br/>
+          <label>Username:</label><br/>
+          <input type="text" name="username" value={this.state.username} onChange={this.handleInputChange} /><br/>
+          <label>Password:</label><br/>
+          <input type="password" name="password" value={this.state.password} onChange={this.handleInputChange} /><br/>
+          <input type="submit" value="Sign Up" />
+          {this.state.error && <div className="error">{this.state.error}</div>}
+        </form>
+      </div>
+    );
+  }
+}
+
+export default Signup;

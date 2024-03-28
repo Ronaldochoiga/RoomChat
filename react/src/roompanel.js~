@@ -1,0 +1,24 @@
+import React from 'react';
+import RoomMessages from './roomMessages';
+import { saveMessage } from './messageService';
+
+const RoomPanel = ({ username, roomName, roomId }) => {
+  const handleSendMessage = async (message) => {
+    try {
+      await saveMessage(roomId, message, username);
+      console.log('Message saved successfully');
+    } catch (error) {
+      console.error('Error saving message:', error);
+    }
+  };
+
+  return (
+    <div className="room-panel">
+      <h2>Room Details</h2>
+      <p>Room Name: {roomName}</p>
+      <RoomMessages onSendMessage={handleSendMessage} />
+    </div>
+  );
+};
+
+export default RoomPanel;

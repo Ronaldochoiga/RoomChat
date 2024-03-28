@@ -1,0 +1,29 @@
+// RoomMessages.js
+
+import React, { useState } from 'react';
+
+const RoomMessages = ({ sendMessage }) => {
+  const [message, setMessage] = useState('');
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    sendMessage(message); // Call sendMessage function passed from RoomPanel
+    setMessage(''); // Clear the message input
+  }
+
+  return (
+    <div className="room-messages">
+      <form onSubmit={handleSubmit}>
+        <input 
+          type="text"
+          value={message}
+          onChange={(e) => setMessage(e.target.value)}
+          placeholder="Type your message here..."
+        />
+        <button type="submit">Send</button>
+      </form>
+    </div>
+  );
+}
+
+export default RoomMessages;
